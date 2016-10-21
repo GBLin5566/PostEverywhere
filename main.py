@@ -160,28 +160,15 @@ for url in POST_URL:
                 break
             count_reveal += 1
             time.sleep(1)
-    '''
     # Click all "see more"
     try:
-        all_more_chinese = post_div.find_elements_by_xpath("//*[contains(text(), '查看更多')]")
-        for more in all_more_chinese:
+        for see_more in post_div.find_elements_by_css_selector('._5v47.fss'):
             try:
-                more.click()
+                see_more.click()
             except:
                 continue
     except:
         pass
-    try:
-        all_more = post_div.find_elements_by_xpath("//*[contains(text(), 'See More')]")
-        for more in all_more:
-            try:
-                more.click()
-            except:
-                continue
-    except:
-        pass
-    '''
-
 
     # Try to go through all the showed comments
     try:
