@@ -53,11 +53,11 @@ Json format
 ]
 
 '''
-url_dict = get_url_from_files(DATA_DIR_ADDRESS)
+#url_dict = get_url_from_files(DATA_DIR_ADDRESS)
 finish_file = []
 
 
-#url_dict = [("333", ["https://www.facebook.com/daan4fanyun/posts/1393449957351633"])]
+url_dict = [("333", ["https://www.facebook.com/247540868619076/posts/1048306738542481"])]
 
 for F, POST_URL in url_dict:
     json_datas = []
@@ -97,24 +97,32 @@ for F, POST_URL in url_dict:
 	            continue
 	        # Show all the user in "more"
             try:
-	            count_like_list = 0
-	            total_number = 0
-	            pre_total_number = 0
-	            pre_pre_total_number = 0
-	            while True:
-	                try:
-	                    driver.find_element_by_id('reaction_profile_pager').find_element_by_class_name('uiMorePagerPrimary').click()
-	                    if total_number == len(driver.find_elements_by_class_name(LIKE_LIST_USER_CLASSNAME)) == pre_total_number == pre_pre_total_number:
-	                        break
-	                    pre_pre_total_number = pre_total_number
-	                    pre_total_number = total_number
-	                    total_number = len(driver.find_elements_by_class_name(LIKE_LIST_USER_CLASSNAME))
-	                    count_like_list = 0
-	                except:
-	                    if count_like_list > CLICK_LIMIT:
-	                        break
-	                    count_like_list += 1
-	                    time.sleep(random()*2+1)
+                count_like_list = 0
+                total_number = 0
+                pre_total_number = 0
+                pre_pre_total_number = 0
+                while True:
+                    # More than like
+                    reaction_name = 'reaction_profile_pager'
+                    try:
+                        driver.find_element_by_id(reaction_name).find_element_by_class_name('uiMorePagerPrimary')
+                    except:
+                        reaction_name = reaction_name + '1'
+                    try:
+                        driver.find_element_by_id(reaction_name).find_element_by_class_name('uiMorePagerPrimary').click()
+                        if total_number == len(driver.find_elements_by_class_name(LIKE_LIST_USER_CLASSNAME)) == pre_total_number == pre_pre_total_number:
+                            break
+                        pre_pre_total_number = pre_total_number
+                        pre_total_number = total_number
+                        total_number = len(driver.find_elements_by_class_name(LIKE_LIST_USER_CLASSNAME))
+                        count_like_list = 0
+                        time.sleep(random() + 1)
+                    except:
+                        print sys.exc_info()[0]
+                        if count_like_list > CLICK_LIMIT:
+                            break
+                        count_like_list += 1
+                        time.sleep(random()*2+1)
             except:
 	            print "[*] Show more user exception: ",sys.exc_info()[0]
 	        # Get user id & url
@@ -138,7 +146,7 @@ for F, POST_URL in url_dict:
             try:
                 post_div = driver.find_element_by_class_name('userContentWrapper')
                 share_link = post_div.find_element_by_class_name('UFIShareLink')
-                close_click = driver.find_element_by_css_selector('._42ft._5upp._50zy.layerCancel._1f6._51-t._50-0._50z-')
+                close_click = driver.find_element_by_css_selector('._42ft._5upp._50zy.layerCancel')
                 webdriver.ActionChains(driver).move_to_element(close_click).click(close_click).perform()
                 time.sleep(random()+1)
                 webdriver.ActionChains(driver).move_to_element(share_link).click(share_link).perform()
@@ -191,7 +199,7 @@ for F, POST_URL in url_dict:
 	        # Try to get the post content
             try:
                 # Go to normal page
-                close_click = driver.find_element_by_css_selector('._42ft._5upp._50zy.layerCancel._51-t._50-0._50z-')
+                close_click = driver.find_element_by_css_selector('._42ft._5upp._50zy.layerCancel')
                 webdriver.ActionChains(driver).move_to_element(close_click).click(close_click).perform()
                 time.sleep(3)
                 post_div = driver.find_element_by_class_name('userContentWrapper')
