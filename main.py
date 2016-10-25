@@ -19,7 +19,7 @@ from read_xlsx import get_url_from_files
 CHROME_DRIVER = "/usr/local/bin/chromedriver"
 driver = webdriver.Chrome(executable_path=CHROME_DRIVER)
 DATA_DIR_ADDRESS = "./data/dist2/"
-JSON_DIR_ADDRESS = "./json/"
+JSON_DIR_ADDRESS = "./json_continue/"
 '''
 # Let's pretend we have url already
 POST_URL = ["https://www.facebook.com/daan4fanyun/posts/1393449957351633",
@@ -53,11 +53,11 @@ Json format
 ]
 
 '''
-#url_dict = get_url_from_files(DATA_DIR_ADDRESS)
+url_dict = get_url_from_files(DATA_DIR_ADDRESS)
 finish_file = []
 
 
-url_dict = [("333", ["https://www.facebook.com/247540868619076/posts/1048306738542481"])]
+#url_dict = [("333", ["https://www.facebook.com/247540868619076/posts/1048306738542481"])]
 
 for F, POST_URL in url_dict:
     json_datas = []
