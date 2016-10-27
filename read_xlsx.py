@@ -2,10 +2,10 @@
 from openpyxl import load_workbook
 import os
 
-def get_file_names(data_dir_address):
+def get_file_names(data_dir_address, ends_with = ".xlsx"):
     files = []
     for f in os.listdir(data_dir_address):
-        if f.endswith('.xlsx'):
+        if f.endswith(ends_with):
             files.append(f)
     return files
 
