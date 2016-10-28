@@ -282,7 +282,7 @@ for F, POST_URL in url_dict:
     except:
         print "Last file ", F
         import cPickle
-        cPickle.dumpt(finish_file, "finish_file.pkl")
+        cPickle.dump(finish_file, "finish_file.pkl")
     import codecs
     with codecs.open(JSON_DIR_ADDRESS + F+".json", "w+", encoding="utf-8") as outfile:
         json.dump(json_datas, outfile, indent=4, ensure_ascii=False)
