@@ -12,7 +12,7 @@ from bs4 import BeautifulSoup
 from read_xlsx import get_file_names
 import codecs
 
-JSON_DIR = "./crawler_data/json_test/"
+JSON_DIR = "./crawler_data/json/"
 WRITE_JSON_DIR = "./crawler_data/json_new/"
 PROFILE_URL_PREFIX = "https://www.facebook.com/profile.php?id="
 
