@@ -16,10 +16,11 @@ JSON_DIR = "./crawler_data/json_test/"
 WRITE_JSON_DIR = "./crawler_data/json_new/"
 
 def main():
-
-    json_files = get_file_names(JSON_DIR, '.json')
     
+    json_files = get_file_names(JSON_DIR, '.json')
+    counter = 0
     for json_file in json_files:
+        # Parellel computing starts from here
         print "Accessing ", json_file
         try:
             with open(JSON_DIR + json_file, 'r') as f:
@@ -31,6 +32,7 @@ def main():
                             for i, c in enumerate(datas[k]["info"]["comments"]):
                                 try:
                                     user_url = c["url"]
+                                    counter += 1
                                     likes = profile_url_access(user_url)
                                     datas[k]["info"]["comments"][i]["likes"] = likes
                                 except:
@@ -41,6 +43,7 @@ def main():
                             for i, l in enumerate(datas[k]["info"]["likes"]):
                                 try:
                                     user_url = l
+                                    counter += 1
                                     likes_likes = profile_url_access(user_url)
                                     new_likes.append({"url":l, "likes":likes_likes})
                                 except:
@@ -50,6 +53,7 @@ def main():
                             for i, s in enumerate(datas[k]["info"]["shares"]):
                                 try:
                                     user_url = s["url"]
+                                    counter += 1
                                     likes = profile_url_access(user_url)
                                     datas[k]["info"]["shares"][i]["likes"] = likes
                                 except:
@@ -63,7 +67,7 @@ def main():
             print "[*] Read file exception: ",sys.exc_info()[0]
             print "[*] Escaping ", json_file
             continue
-
+    print "Counter = ", counter
 
 def jsonfile_access(filename):
 
