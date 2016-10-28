@@ -12,7 +12,7 @@ from bs4 import BeautifulSoup
 from read_xlsx import get_file_names
 import codecs
 
-JSON_DIR = "./crawler_data/json/"
+JSON_DIR = "./crawler_data/json_test/"
 WRITE_JSON_DIR = "./crawler_data/json_new/"
 
 def main():
@@ -76,9 +76,11 @@ def jsonfile_access(filename):
 def profile_url_access(url):
     write_dict = []
     try:
-        time.sleep(random.randint(3,10))
+        time.sleep(random.randint(3,5))
         res = requests.get(url)
         print "Requests get [ ", url, " ] success."
+    except KeyboardInterrupt:
+        sys.exit(-1)
     except:
         print "[*] Get url exception: ",sys.exc_info()[0]
         return write_dict
@@ -89,6 +91,9 @@ def profile_url_access(url):
         return write_dict
     try:
         table = soup.find("div", class_ = "phs")
+        if not table:
+            print "[*] Cannot find table, return null list"
+            return write_dict
         for tbody in table.find_all("tbody"):
             try:
                 label = tbody.find("div", class_ = "labelContainer")
@@ -105,8 +110,9 @@ def profile_url_access(url):
                 print "[*] Get label exception: ",sys.exc_info()[0]
         return write_dict
     except:
-        print "[*] Get tbody exception: ",sys.exc_info()[0]
+        print "[*] Get tbody exception: ",sys.exc_info()
         return write_dict
 
 if __name__ == "__main__":
     main()
+    #jsonfile_access('sdf')
