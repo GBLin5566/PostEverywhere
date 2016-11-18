@@ -26,7 +26,7 @@ PUNC = set(u'''@#$%^&*()~/:!),.:;?]}¢'"、。〉》」』】〕〗〞︰︱︳�
 filterpunt = lambda s: ''.join(filter(lambda x: x not in PUNC, s))
 filterpuntl = lambda l: list(filter(lambda x: x not in PUNC, l))
 
-SHOW_MAX = 20
+SHOW_MAX = 30
 
 def query():
     xlsx_file_names = get_file_names(DATA_PATH)
@@ -64,12 +64,14 @@ def query():
 
 def term_frequency():
     d = query()
+    k_num = {}
     for k in QUERY_KEYWORD:
         d_for_k = {}
         content = d[k]
+        k_num[k] = len(content)
         for c in content:
             #c_cut = jieba.cut(c, cut_all=False)
-            c_cut = jieba.analyse.extract_tags(c)
+            c_cut = jieba.analyse.extract_tags(c, topK=len(c)/5)
             try:
                 list_c = list(c_cut)
             except:
@@ -85,7 +87,7 @@ def term_frequency():
         sorted_d_k = sorted(d[k].items(), key=operator.itemgetter(1))
         sorted_d_k.reverse()
         counter = 0
-        print k
+        print k, " # of contents: ", k_num[k]
         for _ in sorted_d_k:
             print sorted_d_k[counter][0], ": ", sorted_d_k[counter][1]
             counter += 1
