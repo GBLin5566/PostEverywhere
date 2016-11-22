@@ -35,6 +35,8 @@ def main():
                                     new_url = find_user_id_from_url(user_url)
                                     if new_url:
                                         datas[k]["info"]["comments"][i]["url"] = new_url
+                                    else:
+                                        print "[*] Fail to access profile ", user_url
                                 except:
                                     print "[*] Writing comment url exception: ",sys.exc_info()
                                     continue
@@ -45,6 +47,8 @@ def main():
                                     new_url = find_user_id_from_url(user_url)
                                     if new_url:
                                         datas[k]["info"]["likes"][i] = new_url
+                                    else:
+                                        print "[*] Fail to access profile ", user_url
                                 except:
                                     print "[*] Writing like url exception: ",sys.exc_info()
                                     continue
@@ -55,6 +59,8 @@ def main():
                                     new_url = find_user_id_from_url(user_url)
                                     if new_url:
                                         datas[k]["info"]["shares"][i]["url"] = new_url
+                                    else:
+                                        print "[*] Fail to access profile ", user_url
                                 except:
                                     print "[*] Writing share url exception: ",sys.exc_info()
                                     continue
@@ -68,14 +74,19 @@ def main():
             print "[*] Escaping ", json_file
             continue
 
+def remove_line():
+    CURSOR_UP_ONE = '\x1b[1A'
+    #ERASE_LINE = '\x1b[2K'
+    print CURSOR_UP_ONE #+ ERASE_LINE
+
 def find_user_id_from_url(url):
     new_url = ""
     try:
-        time.sleep(random.randint(3,5))
+        time.sleep(random.randint(1,2))
         res = requests.get(url)
-        print "Requests get [ ", url, " ] success."
+#        print "Requests get [ ", url, " ] success."
     except KeyboardInterrupt:
-        sys.exit(-1)
+        sys.exit(0)
     except:
         print "[*] Get url exception: ",sys.exc_info()[0]
         return new_url

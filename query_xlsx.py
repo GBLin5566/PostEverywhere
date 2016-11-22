@@ -34,6 +34,7 @@ filterpuntl = lambda l: list(filter(lambda x: x not in PUNC, l))
 
 SHOW_MAX = 100
 DONT_COUNT_OFFICIAL = False
+ONLY_OFFICIAL = True
 
 if len(sys.argv) < 2:
     FILE_NAME = 'df_result.txt'
@@ -63,7 +64,15 @@ def query():
                 for k in QUERY_KEYWORD:
                     try:
                         c_encode = c.encode('utf-8')
-                        if (not DONT_COUNT_OFFICIAL and (k in p.encode('utf-8') or k in c_encode)) \
+                        if ONLY_OFFICIAL:
+                            if k in p.encode('utf-8'):
+                                my_dict[k].append(filterpunt(c_encode))
+                                like = int(page[PAGE_LIKE].real[i])
+                                comment = int(page[PAGE_COMMENT].real[i])
+                                share = int(page[PAGE_SHARE].real[i])
+                                score = like * WEIGHT[0] + comment * WEIGHT[1] + share * WEIGHT[2]
+                                my_dict_weight[k].append(score)
+                        elif (not DONT_COUNT_OFFICIAL and (k in p.encode('utf-8') or k in c_encode)) \
                         or (DONT_COUNT_OFFICIAL and k not in p.encode('utf-8') and k in c_encode):
                             my_dict[k].append(filterpunt(c_encode))
                             like = int(page[PAGE_LIKE].real[i])
