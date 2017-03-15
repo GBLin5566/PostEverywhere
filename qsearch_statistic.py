@@ -41,9 +41,13 @@ def query():
     list_of_contents = []
     list_of_contents_score = []
     for name in xlsx_file_names:
-        print("Reading ", name)
-        pd_read_xlsx = pd.ExcelFile(DATA_PATH + name)
-        pd_page = pd_read_xlsx.parse('Timeline')
+        try:
+            print("Reading ", name)
+            pd_read_xlsx = pd.ExcelFile(DATA_PATH + name)
+            pd_page = pd_read_xlsx.parse('Timeline')
+        except Exception:
+            # except reading bad file
+            continue
         for index, page_content in enumerate(pd_page[PAGE_CONTENT].real):
             try:
                 # Preprocess
