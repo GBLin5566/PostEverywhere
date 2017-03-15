@@ -10,6 +10,8 @@ import os
 import pandas as pd
 import purewords
 
+
+
 def get_file_names(data_dir_address, ends_with=".xlsx"):
     """List all the file ends_with keyword.
     Args:
@@ -24,17 +26,6 @@ def get_file_names(data_dir_address, ends_with=".xlsx"):
             files.append(file)
     return files
 
-DATA_PATH = sys.argv[1]
-PAGE_NAME = 'Unnamed: 1'
-PAGE_LIKE = 'Unnamed: 4'
-PAGE_COMMENT = 'Unnamed: 5'
-PAGE_SHARE = 'Unnamed: 6'
-PAGE_CONTENT = 'Unnamed: 7'
-SHOW_MAX = 1000
-
-TF_FILE_NAME = sys.argv[2]
-WEIGHTED_TF_FILE_NAME = sys.argv[3]
-
 def query():
     """Sum up the content and content's score
     Returns:
@@ -42,6 +33,10 @@ def query():
                                 (content is split by space into list too).
         list_of_contents_score(list): list contains content's score.
     """
+    PAGE_LIKE = 'Unnamed: 4'
+    PAGE_COMMENT = 'Unnamed: 5'
+    PAGE_SHARE = 'Unnamed: 6'
+    PAGE_CONTENT = 'Unnamed: 7'
     xlsx_file_names = get_file_names(DATA_PATH)
     list_of_contents = []
     list_of_contents_score = []
@@ -101,4 +96,9 @@ def write_file(filename, write_dict):
                 break
 
 if __name__ == "__main__":
+    DATA_PATH = sys.argv[1]
+    TF_FILE_NAME = sys.argv[2]
+    WEIGHTED_TF_FILE_NAME = sys.argv[3]
+    SHOW_MAX = 1000
+
     term_freq()
