@@ -7,10 +7,11 @@
 import sys
 import operator
 import os
+from math import isnan
+from xlrd.biffh import XLRDError
+
 import pandas as pd
 import purewords
-
-
 
 def get_file_names(data_dir_address, ends_with=".xlsx"):
     """List all the file ends_with keyword.
@@ -33,10 +34,6 @@ def query():
                                 (content is split by space into list too).
         list_of_contents_score(list): list contains content's score.
     """
-    PAGE_LIKE = 'Unnamed: 4'
-    PAGE_COMMENT = 'Unnamed: 5'
-    PAGE_SHARE = 'Unnamed: 6'
-    PAGE_CONTENT = 'Unnamed: 7'
     xlsx_file_names = get_file_names(DATA_PATH)
     list_of_contents = []
     list_of_contents_score = []
@@ -45,7 +42,7 @@ def query():
             print("Reading ", name)
             pd_read_xlsx = pd.ExcelFile(DATA_PATH + name)
             pd_page = pd_read_xlsx.parse('Timeline')
-        except Exception:
+        except (AttributeError, XLRDError):
             # except reading bad file
             continue
         for index, page_content in enumerate(pd_page[PAGE_CONTENT].real):
@@ -68,8 +65,11 @@ def term_freq():
     list_of_contents, list_of_contents_score = query()
     tf_dict = {}
     weighted_tf_dict = {}
+    remove_words = get_remove_word(REMOVE_PATH)
     for content, score in zip(list_of_contents, list_of_contents_score):
         for char in content:
+            if char in remove_words:
+                continue
             if char in tf_dict:
                 tf_dict[char] += 1
             else:
@@ -82,6 +82,20 @@ def term_freq():
     # Write out
     write_file(TF_FILE_NAME, tf_dict)
     write_file(WEIGHTED_TF_FILE_NAME, weighted_tf_dict)
+
+def get_remove_word(remove_path):
+    """Get the removed word from a csv
+    Args:
+        remove_path(str): path to the csv
+    Returns:
+        a set of removed words
+    """
+    remove_words = []
+    remove_df = pd.read_csv(remove_path, header=None)
+    for word, class_type in zip(remove_df[0], remove_df[2]):
+        if not check_nan(class_type):
+            remove_words.append(word)
+    return set(remove_words)
 
 def write_file(filename, write_dict):
     """Write file for dict.
@@ -99,10 +113,27 @@ def write_file(filename, write_dict):
             if index > SHOW_MAX:
                 break
 
+def check_nan(var):
+    """My func. to check whether a input is nan.
+    Args:
+        var(str): to be checked var.
+    Returns:
+        If var is nan return True, vice versa
+    """
+    try:
+        return isnan(var)
+    except TypeError:
+        return False
+
 if __name__ == "__main__":
+    PAGE_LIKE = 'Unnamed: 4'
+    PAGE_COMMENT = 'Unnamed: 5'
+    PAGE_SHARE = 'Unnamed: 6'
+    PAGE_CONTENT = 'Unnamed: 7'
     DATA_PATH = sys.argv[1]
-    TF_FILE_NAME = sys.argv[2]
-    WEIGHTED_TF_FILE_NAME = sys.argv[3]
+    REMOVE_PATH = sys.argv[2]
+    TF_FILE_NAME = sys.argv[3]
+    WEIGHTED_TF_FILE_NAME = sys.argv[4]
     SHOW_MAX = 1000
 
     term_freq()
