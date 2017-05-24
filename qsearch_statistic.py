@@ -40,7 +40,7 @@ def query():
     for name in xlsx_file_names:
         try:
             print("Reading ", name)
-            pd_read_xlsx = pd.ExcelFile(DATA_PATH + name)
+            pd_read_xlsx = pd.ExcelFile(os.path.join(DATA_PATH, name))
             pd_page = pd_read_xlsx.parse('Timeline')
         except (AttributeError, XLRDError):
             # except reading bad file
